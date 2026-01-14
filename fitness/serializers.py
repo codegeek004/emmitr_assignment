@@ -1,6 +1,10 @@
 from rest_framework import serializers
+from rest_framework.relations import PrimaryKeyRelatedField
 from fitness.models import (
-    CustomUser
+    AdditionalInfo,
+    CustomUser,
+    Diseases,
+    FitnessInfo
 )
 
 
@@ -37,3 +41,42 @@ class RegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
+
+
+class DiseaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Diseases
+        fields = ['name', 'level', 'duration']
+
+    def create(self, validated_data):
+        disease = Diseases.objects.create_user(
+            name=validated_data['name'],
+            level=validated_data['level'],
+            duration=validated_data['duration'],
+        )
+        return disease
+
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    disease_detail = DiseaseSerializer(source="diseases", read_only=True)
+
+    class Meta:
+        model = AdditionalInfo
+        fields = [
+            'diseases',
+            'disease_detail',
+            'smoking',
+            'drinking',
+            'injuries',
+            'stress_level'
+        ]
+
+
+class FitnessInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FitnessInfo
+        fields = [
+            'fitness_goal',
+            'current_fitness_level',
+            'workout_location',
+        ]
