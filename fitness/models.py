@@ -48,9 +48,10 @@ class FitnessInfo(models.Model):
 
 class AdditionalInfo(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    diseases = models.ForeignKey('fitness.Diseases', on_delete=models.CASCADE)
-    family_history = models.ForeignKey(
-        'fitness.FamilyHistory', on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        'fitness.CustomUser', on_delete=models.CASCADE)
+    diseases = models.ForeignKey(
+        'fitness.Diseases', on_delete=models.SET_NULL, null=True, blank=True)
     smoking = models.BooleanField(default=False)
     drinking = models.BooleanField(default=False)
     injuries = models.TextField(blank=True)
@@ -63,20 +64,9 @@ class AdditionalInfo(models.Model):
         max_length=6, choices=LEVEL_CHOICES, default='low')
 
 
-class FamilyHistory(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=30)
-    LEVEL_CHOICES = (
-        ('low', 'Low'),
-        ('medium', 'Medium'),
-        ('high', 'High')
-    )
-    level = models.CharField(
-        max_length=6, choices=LEVEL_CHOICES, default='low')
-
-
 class Diseases(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey('fitness.CustomUser', on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
     LEVEL_CHOICES = (
         ('low', 'Low'),
