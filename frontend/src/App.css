@@ -55,7 +55,8 @@ body {
     justify-content: space-between;
     align-items: center;
 }
-.nav-links{
+
+.nav-links {
     display: flex;
     gap: 2vw;
     align-items: center;
@@ -100,6 +101,7 @@ body {
     gap: 16px;
     margin-top: 28px;
     justify-content: center;
+    margin-bottom: 10px;
 }
 
 /* Forms */
@@ -175,7 +177,7 @@ button {
 /* Disease item */
 .disease-row {
     display: flex;
-/*    flex-direction: column;*/
+    /*    flex-direction: column;*/
     justify-content: center;
     gap: 20px;
 }
