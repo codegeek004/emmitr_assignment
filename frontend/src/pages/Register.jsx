@@ -51,8 +51,8 @@ export default function Register() {
                     </select>
 
                     <input name="contact" placeholder="Contact number" onChange={handleChange} required />
-                    <input name="height" type="number" placeholder="Height (cm)" onChange={handleChange} required />
-                    <input name="weight" type="number" placeholder="Weight (kg)" onChange={handleChange} required />
+                    <input name="height" type="number" step="0.01" placeholder="Height (cm)" onChange={handleChange} required />
+                    <input name="weight" type="number" step="0.01" placeholder="Weight (kg)" onChange={handleChange} required />
 
                     <select name="diet_preference" onChange={handleChange}>
                         <option value="veg">Vegetarian</option>
