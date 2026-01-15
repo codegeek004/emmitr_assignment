@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     # library for JWT Authenticaton
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    # for api docs
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -139,6 +141,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
@@ -157,3 +160,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
 ]
 CORS_ALLOW_CREDENTIALS = True
+
+# for generating api docs
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'EmmitrFit API',
+    'DESCRIPTION': 'API for AI-Powered Fitness & Diet Application',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
