@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from fitness.models import (
@@ -19,58 +18,27 @@ from rest_framework import status
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import mixins
-from rest_framework.generics import GenericAPIView
-from django.conf import settings
 import requests
 import json
 from decouple import config
 # jwt
-from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.exceptions import InvalidToken
 
 
 class HomeView(APIView):
     def get(self, request):
-        response_text = '''Motivational Lines
 
-        Consistency beats intensity when intensity fades.
-
-        Small actions, repeated daily, build unstoppable momentum.
-
-        Discipline is self-respect in action.
-
-        Progress is quiet—keep going anyway.
-
-        Lifestyle Tips
-
-        Sleep and wake at the same time every day
-        energy follows rhythm.
-
-        Eat protein first at meals to stabilize energy and focus.
-
-        Move for five minutes every hour—walk, stretch, reset.
-
-        Limit screens one hour before bed to protect deep sleep.
-
-        Posture Tips
-
-        Keep feet flat, hips slightly higher than knees, spine neutral.
-
-        Screen at eye level
-        elbows close to the body at 90°.
-
-        Pull shoulders gently back and down—avoid shrugging.
-
-        Do a 30-second chest opener every hour to counter slouching.'''
         return Response(
             {
                 "message": "Welcome to the API",
-                "Quotes": response_text
             })
 
 
+# View for register endpoint
+
+
 class RegisterView(APIView):
+
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
 
@@ -84,6 +52,9 @@ class RegisterView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# View for login endpoint
+
+
 class LoginView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -94,6 +65,7 @@ class LoginView(APIView):
                 password=serializer.validated_data['password']
             )
             if user is not None:
+                # generates jwt access token and refresh token
                 refresh = RefreshToken.for_user(user)
 
                 return Response(
@@ -110,11 +82,16 @@ class LoginView(APIView):
         )
 
 
+# view for disease endpoint
+
+
 class DiseaseView(APIView):
+    # check if the user is authenticated
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
         diseases = Diseases.objects.filter(user=request.user)
+        # returns multiple objects if there are any
         serializer = DiseaseSerializer(diseases, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -133,7 +110,9 @@ class DiseaseView(APIView):
     def delete(self, request):
         disease_id = request.data.get('id')
         if not disease_id:
-            return Response({"error": "ID required"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "ID required"},
+                status=status.HTTP_400_BAD_REQUEST)
 
         try:
             disease = Diseases.objects.get(id=disease_id, user=request.user)
@@ -141,6 +120,10 @@ class DiseaseView(APIView):
             return Response({"message": "Deleted"}, status=status.HTTP_200_OK)
         except Diseases.DoesNotExist:
             return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+# view for user_info endpoint
+# uses builtin mixins with GenericAPIView for get, post, put and patch methods
 
 
 class UserInfoView(
@@ -152,6 +135,7 @@ class UserInfoView(
     serializer_class = UserInfoSerializer
     permission_classes = [IsAuthenticated]
 
+    # fetch the database objects (model: AdditionalInfo)
     def get_object(self):
         obj, created = AdditionalInfo.objects.get_or_create(
             user=self.request.user
@@ -177,6 +161,10 @@ class UserInfoView(
         return self.partial_update(request, *args, **kwargs)
 
 
+# view for fitness_info endpoint
+# uses builtin mixins with GenericAPIView for get, post, put and patch methods
+
+
 class FitnessInfoView(
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
@@ -184,8 +172,10 @@ class FitnessInfoView(
     GenericAPIView,
 ):
     serializer_class = FitnessInfoSerializer
+    # checks if the user is authenticated
     permission_classes = [IsAuthenticated]
 
+    # fetch the database objects (model: FitnessInfo)
     def get_object(self):
         obj, _ = FitnessInfo.objects.get_or_create(
             user=self.request.user
@@ -209,6 +199,9 @@ class FitnessInfoView(
 
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
+
+
+# view for workout_plan endpoint
 
 
 class WorkoutPlanView(APIView):
@@ -279,7 +272,7 @@ class WorkoutPlanView(APIView):
         - Be practical, safe, and realistic.
         - Reduce intensity if stress, injury, or disease exists.
         """
-
+        # calling groq api with headers
         response = requests.post(
             "https://api.groq.com/openai/v1/chat/completions",
             headers={
@@ -299,15 +292,17 @@ class WorkoutPlanView(APIView):
         )
 
         response.raise_for_status()
-
+        # output of the llm
         raw_output = response.json()["choices"][0]["message"]["content"]
 
         try:
+            # converts the output of the api(response from llm) to json
             workout_plan = json.loads(raw_output)
-            # voice_response = (
-            #     text_to_speech(json.dumps(workout_plan))
-            #     if workout_plan else None
-            # )
+            # calls the text_to_speech function on jsonified output
+            voice_response = (
+                text_to_speech(json.dumps(workout_plan))
+                if workout_plan else None
+            )
 
         except json.JSONDecodeError:
             return Response(
@@ -321,13 +316,17 @@ class WorkoutPlanView(APIView):
         return Response(
             {
                 "workout_plan": workout_plan,
-                # "voice_response": voice_response,
+                "voice_response": voice_response,
             },
             status=status.HTTP_200_OK,
         )
 
 
+# view for diet_plan endpoint
+
+
 class DietPlanView(APIView):
+    # checks if the user is authenticated
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -394,7 +393,7 @@ class DietPlanView(APIView):
         - Be practical, safe, and realistic.
         - Reduce intensity if stress, injury, or disease exists.
         """
-
+        # calls the api with prompt defined above
         response = requests.post(
             "https://api.groq.com/openai/v1/chat/completions",
             headers={
@@ -414,16 +413,17 @@ class DietPlanView(APIView):
         )
 
         response.raise_for_status()
-
+        # output from the api(response from llm)
         raw_output = response.json()["choices"][0]["message"]["content"]
 
-        # ---- JSON parsing + TTS ----
         try:
+            # converts the response from llm to json
             diet_plan = json.loads(raw_output)
-            # voice_response = (
-            #     text_to_speech(json.dumps(diet_plan))
-            #     if diet_plan else None
-            # )
+            # calls the text_to_speech function and passes jsonified output as parameter
+            voice_response = (
+                text_to_speech(json.dumps(diet_plan))
+                if diet_plan else None
+            )
 
         except json.JSONDecodeError:
             return Response(
@@ -437,7 +437,7 @@ class DietPlanView(APIView):
         return Response(
             {
                 "diet_plan": diet_plan,
-                # "voice_response": voice_response,
+                "voice_response": voice_response,
             },
             status=status.HTTP_200_OK,
         )
