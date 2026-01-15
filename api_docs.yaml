@@ -1,0 +1,389 @@
+openapi: 3.0.3
+info:
+  title: EmmitrFit API
+  version: 1.0.0
+  description: API for AI-Powered Fitness & Diet Application
+paths:
+  /api/:
+    get:
+      operationId: root_retrieve
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/diet_plan/:
+    post:
+      operationId: diet_plan_create
+      tags:
+      - diet_plan
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/diseases/:
+    get:
+      operationId: diseases_retrieve
+      tags:
+      - diseases
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: diseases_create
+      tags:
+      - diseases
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: diseases_destroy
+      tags:
+      - diseases
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/fitness_info/:
+    get:
+      operationId: fitness_info_retrieve
+      tags:
+      - fitness_info
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FitnessInfo'
+          description: ''
+    post:
+      operationId: fitness_info_create
+      tags:
+      - fitness_info
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FitnessInfo'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FitnessInfo'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FitnessInfo'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FitnessInfo'
+          description: ''
+    put:
+      operationId: fitness_info_update
+      tags:
+      - fitness_info
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FitnessInfo'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FitnessInfo'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FitnessInfo'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FitnessInfo'
+          description: ''
+    patch:
+      operationId: fitness_info_partial_update
+      tags:
+      - fitness_info
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFitnessInfo'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFitnessInfo'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFitnessInfo'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FitnessInfo'
+          description: ''
+  /api/login/:
+    post:
+      operationId: login_create
+      tags:
+      - login
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/register/:
+    post:
+      operationId: register_create
+      tags:
+      - register
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/user_info/:
+    get:
+      operationId: user_info_retrieve
+      tags:
+      - user_info
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+          description: ''
+    post:
+      operationId: user_info_create
+      tags:
+      - user_info
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInfo'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserInfo'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserInfo'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+          description: ''
+    put:
+      operationId: user_info_update
+      tags:
+      - user_info
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInfo'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserInfo'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserInfo'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+          description: ''
+    patch:
+      operationId: user_info_partial_update
+      tags:
+      - user_info
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserInfo'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserInfo'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserInfo'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+          description: ''
+  /api/workout_plan/:
+    post:
+      operationId: workout_plan_create
+      tags:
+      - workout_plan
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+components:
+  schemas:
+    CurrentFitnessLevelEnum:
+      enum:
+      - beginner
+      - intermediate
+      - advanced
+      type: string
+      description: |-
+        * `beginner` - Beginner
+        * `intermediate` - Intermediate
+        * `advanced` - Advanced
+    Disease:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 30
+        level:
+          $ref: '#/components/schemas/LevelEnum'
+        duration:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - duration
+      - id
+      - name
+    FitnessInfo:
+      type: object
+      properties:
+        fitness_goal:
+          type: string
+          maxLength: 20
+        current_fitness_level:
+          $ref: '#/components/schemas/CurrentFitnessLevelEnum'
+        workout_location:
+          $ref: '#/components/schemas/WorkoutLocationEnum'
+      required:
+      - fitness_goal
+    LevelEnum:
+      enum:
+      - low
+      - medium
+      - high
+      type: string
+      description: |-
+        * `low` - Low
+        * `medium` - Medium
+        * `high` - High
+    PatchedFitnessInfo:
+      type: object
+      properties:
+        fitness_goal:
+          type: string
+          maxLength: 20
+        current_fitness_level:
+          $ref: '#/components/schemas/CurrentFitnessLevelEnum'
+        workout_location:
+          $ref: '#/components/schemas/WorkoutLocationEnum'
+    PatchedUserInfo:
+      type: object
+      properties:
+        diseases:
+          type: string
+          format: uuid
+          nullable: true
+        disease_detail:
+          allOf:
+          - $ref: '#/components/schemas/Disease'
+          readOnly: true
+        smoking:
+          type: boolean
+        drinking:
+          type: boolean
+        injuries:
+          type: string
+        stress_level:
+          $ref: '#/components/schemas/StressLevelEnum'
+    StressLevelEnum:
+      enum:
+      - low
+      - medium
+      - high
+      type: string
+      description: |-
+        * `low` - Low
+        * `medium` - Medium
+        * `high` - High
+    UserInfo:
+      type: object
+      properties:
+        diseases:
+          type: string
+          format: uuid
+          nullable: true
+        disease_detail:
+          allOf:
+          - $ref: '#/components/schemas/Disease'
+          readOnly: true
+        smoking:
+          type: boolean
+        drinking:
+          type: boolean
+        injuries:
+          type: string
+        stress_level:
+          $ref: '#/components/schemas/StressLevelEnum'
+      required:
+      - disease_detail
+    WorkoutLocationEnum:
+      enum:
+      - home
+      - gym
+      - outdoor
+      type: string
+      description: |-
+        * `home` - Home
+        * `gym` - Gym
+        * `outdoor` - Outdoor
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
