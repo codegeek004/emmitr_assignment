@@ -12,7 +12,7 @@ export default function Login() {
             const res = await api.post("login/", form);
             localStorage.setItem("access_token", res.data.access_token);
             localStorage.setItem("refresh_token", res.data.refresh_token);
-            navigate("/");
+            navigate("/setup");
         } catch {
             alert("Invalid credentials");
         }
