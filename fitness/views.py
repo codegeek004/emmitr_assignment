@@ -2,7 +2,11 @@ from django.shortcuts import render
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from fitness.models import AdditionalInfo, FitnessInfo
+from fitness.models import (
+    AdditionalInfo,
+    FitnessInfo,
+    Diseases
+)
 from fitness.text_to_speech import text_to_speech
 from fitness.serializers import (
     RegisterSerializer,
@@ -19,6 +23,7 @@ from rest_framework.generics import GenericAPIView
 from django.conf import settings
 import requests
 import json
+from decouple import config
 # jwt
 from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -108,17 +113,34 @@ class LoginView(APIView):
 class DiseaseView(APIView):
     permission_classes = [IsAuthenticated]
 
+    def get(self, request):
+        diseases = Diseases.objects.filter(user=request.user)
+        serializer = DiseaseSerializer(diseases, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def post(self, request):
         serializer = DiseaseSerializer(data=request.data)
 
         if serializer.is_valid():
-            user = serializer.save()
+            user = serializer.save(user=request.user)
             return Response(
                 {"message": "Disease Added Successfully"},
                 status=status.HTTP_201_CREATED
             )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        disease_id = request.data.get('id')
+        if not disease_id:
+            return Response({"error": "ID required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            disease = Diseases.objects.get(id=disease_id, user=request.user)
+            disease.delete()
+            return Response({"message": "Deleted"}, status=status.HTTP_200_OK)
+        except Diseases.DoesNotExist:
+            return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class UserInfoView(
@@ -222,7 +244,7 @@ class WorkoutPlanView(APIView):
         system_message = (
             "You are a JSON API. "
             "Return ONLY valid JSON. "
-            "Do NOT include explanations, markdown, or code."
+            "Do NOT include explanations, markdown, or code blocks."
         )
 
         schema = """
@@ -241,28 +263,31 @@ class WorkoutPlanView(APIView):
         }
         """
 
-        prompt = """
+        prompt = f"""
         Generate a personalized 7-day workout plan.
+
+        User context:
+        {json.dumps(user_context, indent=2)}
 
         Rules:
         - Output MUST be valid raw JSON.
-        - Do NOT use markdown formatting.
-        - Do NOT use code blocks (no ```json) or '{\"workout_plan\"}'.
-        - Start the response immediately with the character "{".
-        - Follow the schema exactly.
+        - Do NOT use markdown.
+        - Do NOT use code blocks.
+        - Start immediately with "{{".
+        - Follow this schema exactly:
+        {schema}
         - Be practical, safe, and realistic.
-        - Reduce intensity if stress, injury, or disease exists"""
+        - Reduce intensity if stress, injury, or disease exists.
+        """
 
         response = requests.post(
-            "https://openrouter.ai/api/v1/chat/completions",
+            "https://api.groq.com/openai/v1/chat/completions",
             headers={
-                "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
+                "Authorization": f"Bearer {config('OPENAI_API_KEY', cast=str)}",
                 "Content-Type": "application/json",
-                "HTTP-Referer": "http://localhost",
-                "X-Title": "Workout Generator",
             },
             json={
-                "model": "mistralai/mistral-7b-instruct",
+                "model": "llama-3.1-8b-instant",
                 "messages": [
                     {"role": "system", "content": system_message},
                     {"role": "user", "content": prompt},
@@ -270,31 +295,35 @@ class WorkoutPlanView(APIView):
                 "temperature": 0.2,
                 "max_tokens": 700,
             },
-            timeout=60,
+            timeout=30,
         )
 
         response.raise_for_status()
+
         raw_output = response.json()["choices"][0]["message"]["content"]
 
         try:
             workout_plan = json.loads(raw_output)
-            if workout_plan is not None:
-                voice_response = text_to_speech(str(workout_plan))
-            else:
-                voice_response = text_to_speech('')
+            # voice_response = (
+            #     text_to_speech(json.dumps(workout_plan))
+            #     if workout_plan else None
+            # )
+
         except json.JSONDecodeError:
             return Response(
                 {
                     "error": "AI returned invalid JSON",
-                    "raw_response": raw_output
+                    "raw_response": raw_output,
                 },
-                status=500
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
         return Response(
-            {"workout plan": workout_plan,
-             "voice_response": voice_response},
-            status=status.HTTP_200_OK
+            {
+                "workout_plan": workout_plan,
+                # "voice_response": voice_response,
+            },
+            status=status.HTTP_200_OK,
         )
 
 
@@ -327,11 +356,10 @@ class DietPlanView(APIView):
                 "duration_years": disease.duration,
             } if disease else None,
         }
-
         system_message = (
             "You are a JSON API. "
             "Return ONLY valid JSON. "
-            "Do NOT include explanations, markdown, or code."
+            "Do NOT include explanations, markdown, or code blocks."
         )
 
         schema = """
@@ -350,28 +378,31 @@ class DietPlanView(APIView):
         }
         """
 
-        prompt = """
-        Generate a personalized 7-day diet plan in indian diet.
+        prompt = f"""
+        Generate a personalized 7-day Indian diet plan.
+
+        User context:
+        {json.dumps(user_context, indent=2)}
 
         Rules:
         - Output MUST be valid raw JSON.
-        - Do NOT use markdown formatting.
-        - Do NOT use code blocks (no ```json).or '{\"workout_plan\"}'
-        - Start the response immediately with the character "{".
-        - Follow the schema exactly.
+        - Do NOT use markdown.
+        - Do NOT use code blocks.
+        - Start immediately with "{{".
+        - Follow this schema exactly:
+        {schema}
         - Be practical, safe, and realistic.
-        - Reduce intensity if stress, injury, or disease exists"""
+        - Reduce intensity if stress, injury, or disease exists.
+        """
 
         response = requests.post(
-            "https://openrouter.ai/api/v1/chat/completions",
+            "https://api.groq.com/openai/v1/chat/completions",
             headers={
-                "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
+                "Authorization": f"Bearer {config('OPENAI_API_KEY', cast=str)}",
                 "Content-Type": "application/json",
-                "HTTP-Referer": "http://localhost",
-                "X-Title": "Workout Generator",
             },
             json={
-                "model": "mistralai/mistral-7b-instruct",
+                "model": "llama-3.1-8b-instant",
                 "messages": [
                     {"role": "system", "content": system_message},
                     {"role": "user", "content": prompt},
@@ -379,29 +410,34 @@ class DietPlanView(APIView):
                 "temperature": 0.2,
                 "max_tokens": 700,
             },
-            timeout=60,
+            timeout=30,
         )
 
         response.raise_for_status()
+
         raw_output = response.json()["choices"][0]["message"]["content"]
 
+        # ---- JSON parsing + TTS ----
         try:
             diet_plan = json.loads(raw_output)
-            if diet_plan is not None:
-                voice_response = text_to_speech(str(diet_plan))
-            else:
-                voice_response = text_to_speech('')
+            # voice_response = (
+            #     text_to_speech(json.dumps(diet_plan))
+            #     if diet_plan else None
+            # )
+
         except json.JSONDecodeError:
             return Response(
                 {
                     "error": "AI returned invalid JSON",
-                    "raw_response": raw_output
+                    "raw_response": raw_output,
                 },
-                status=500
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
         return Response(
-            {"diet plan": diet_plan,
-             "voice response": voice_response},
-            status=status.HTTP_200_OK
+            {
+                "diet_plan": diet_plan,
+                # "voice_response": voice_response,
+            },
+            status=status.HTTP_200_OK,
         )
