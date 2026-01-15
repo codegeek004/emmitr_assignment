@@ -112,6 +112,7 @@ source venv/bin/activate
 # Install dependencies
 pip install -r requirements.txt
 
+# Add this to your .env
 OPENROUTER_API_KEY = your_api_key
 ELEVENLABS_API_KEY = your_api_key
 VOICE_ID = 'JBFqnCBsd6RMkjVDRZzb'
