@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-e3vy&+n9zluy(r2xg-j&t+q=xxb7l%avi9+-+4x=^*kd3u4dhr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# urls that are allowed to make request to the application
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -38,15 +39,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'fitness',
-    'corsheaders',
+    'fitness',  # app name
+    'corsheaders',  # used for accepting requests from different origin(react)
     'rest_framework',
+    # library for JWT Authenticaton
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # middleware for handling cors
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -82,10 +84,10 @@ WSGI_APPLICATION = 'emmitr.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'localhost',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'NAME': 'emmitr',
+        'HOST': config('HOST', cast=str),
+        'USER': config('DB_USER', cast=str),
+        'PASSWORD': config('PASSWORD', cast=str),
+        'NAME': config('DB_NAME', cast=str),
     }
 }
 
@@ -140,13 +142,16 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
+    # validity of JWT token
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
+    # token used to rotate JWT access token
     "RERESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
-OPENROUTER_API_KEY = config('OPENROUTER_API_KEY', cast=str)
+
+# origins allowed to make request other than the server running at 127.0.0.1:8000
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
