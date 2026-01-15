@@ -1,0 +1,197 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+    --primary: #6366f1;
+    --accent: #10b981;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: #e5e7eb;
+    --radius: 16px;
+    --shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* Layout */
+.container {
+    max-width: 1300px;
+    margin: auto;
+    padding: 32px;
+    width: 100%;
+}
+
+.page {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Navbar */
+.navbar {
+    background: white;
+    border-bottom: 1px solid var(--border);
+}
+
+.centered {
+    text-align: center;
+}
+
+.nav-inner {
+    max-width: 1300px;
+    margin: auto;
+    padding: 18px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.nav-links{
+    display: flex;
+    gap: 2vw;
+    align-items: center;
+}
+
+.nav-links a,
+.nav-links b.centered input,
+.centered select,
+.centered textarea {
+    text-align: center;
+
+        {
+        margin-left: 18px;
+        background: none;
+        border: none;
+        font-weight: 500;
+        cursor: pointer;
+    }
+}
+
+/* Cards */
+.card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 32px;
+    margin-bottom: 32px;
+}
+
+/* Hero */
+.hero {
+    /* background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: white;
+        padding: 64px;
+        border-radius: 24px;*/
+    text-align: center;
+
+}
+
+.hero-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 28px;
+    justify-content: center;
+}
+
+/* Forms */
+input,
+select {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    font-size: 14px;
+}
+
+.card {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.centered input,
+.centered select,
+.centered textarea {
+    text-align: center;
+}
+
+.centered button {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Buttons */
+button {
+    padding: 1.5vh 2vh;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 2px;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-accent {
+    background: var(--accent);
+    color: white;
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: white;
+
+}
+
+/* Grid */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+/* Disease item */
+.disease-row {
+    display: flex;
+/*    flex-direction: column;*/
+    justify-content: center;
+    gap: 20px;
+}
+
+.grid-2,
+.grid-3 {
+    justify-items: center;
+}
+
+/* Audio */
+.audio-player {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    width: 320px;
+}
