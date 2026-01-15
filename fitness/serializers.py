@@ -46,10 +46,11 @@ class LoginSerializer(serializers.Serializer):
 class DiseaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Diseases
-        fields = ['name', 'level', 'duration']
+        fields = ['id', 'name', 'level', 'duration']
 
     def create(self, validated_data):
-        disease = Diseases.objects.create_user(
+        disease = Diseases.objects.create(
+            user=validated_data['user'],
             name=validated_data['name'],
             level=validated_data['level'],
             duration=validated_data['duration'],
