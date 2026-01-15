@@ -10,6 +10,7 @@ from fitness.views import (
     WorkoutPlanView,
     DietPlanView
 )
+# url paths for the api endpoints
 urlpatterns = [
     path('', HomeView.as_view(), name="home"),
     path('register/', RegisterView.as_view(), name='register'),
