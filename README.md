@@ -113,7 +113,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # Add this to your .env
-OPENROUTER_API_KEY = your_api_key
+OPENAI_API_KEY = your_api_key
 ELEVENLABS_API_KEY = your_api_key
 VOICE_ID = 'JBFqnCBsd6RMkjVDRZzb'
 MODEL_ID = 'eleven_multilingual_v2'
