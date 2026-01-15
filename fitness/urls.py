@@ -7,7 +7,8 @@ from fitness.views import (
     UserInfoView,
     DiseaseView,
     FitnessInfoView,
-    WorkoutPlanView
+    WorkoutPlanView,
+    DietPlanView
 )
 urlpatterns = [
     path('', HomeView.as_view(), name="home"),
@@ -17,6 +18,7 @@ urlpatterns = [
     path('diseases/', DiseaseView.as_view(), name='diseases'),
     path("fitness_info/", FitnessInfoView.as_view(), name='fitness'),
     path("workout_plan/", WorkoutPlanView.as_view(), name="workout-plan"),
+    path('diet_plan/', DietPlanView.as_view(), name='diet_plan')
 
 
 ]
