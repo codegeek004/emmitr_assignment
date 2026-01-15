@@ -6,11 +6,29 @@ from fitness.models import (
     Diseases,
     FitnessInfo
 )
+from django.core.validators import RegexValidator
+
+# Using ModelSerializer because I dont want to override the field behaviour existing in models
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    # Regex Validation for password
+    password = serializers.CharField(
+        write_only=True,
+        validators=[
+            RegexValidator(
+                regex=r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
+                message=(
+                    "Password must be at least 8 characters long and include "
+                    "uppercase, lowercase, number, and special character."
+                )
+            )
+        ]
+    )
+
     class Meta:
         model = CustomUser
+        # fields to serialize
         fields = [
             'username',
             'password',
@@ -46,6 +64,7 @@ class LoginSerializer(serializers.Serializer):
 class DiseaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Diseases
+        # fields to serialize
         fields = ['id', 'name', 'level', 'duration']
 
     def create(self, validated_data):
@@ -63,6 +82,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AdditionalInfo
+        # fields to serialize
         fields = [
             'diseases',
             'disease_detail',
@@ -76,6 +96,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
 class FitnessInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = FitnessInfo
+        # fields to serialize
         fields = [
             'fitness_goal',
             'current_fitness_level',
