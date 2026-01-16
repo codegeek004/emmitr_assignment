@@ -11,7 +11,7 @@
 7. [How It Works (Under the Hood)](#how-it-works)
 8. [Project Structure](#project-structure)
 9. [Contributing](#contributing)
-10. [License](#license)
+10. [References](#references)
 
 ---
 
@@ -203,20 +203,20 @@ We solved the complex problem of users having multiple conditions by creating a 
 .
 ├── emmitr/                      # Project Configuration Directory
 │   ├── __init__.py
-│   ├── asgi.py                  
+│   ├── asgi.py
 │   ├── settings.py              # Main settings (DB, Apps, Middleware, CORS)
 │   ├── urls.py                  # Global URL routing (Admin + API path)
-│   └── wsgi.py                  
+│   └── wsgi.py
 │
 ├── fitness/                     # Main Django Application
 │   ├── __init__.py
-│   ├── admin.py                 
-│   ├── apps.py                  
+│   ├── admin.py
+│   ├── apps.py
 │   ├── migrations/              # Database migration files
 │   ├── models.py                # Database Schema (CustomUser, FitnessInfo, Diseases)
 │   ├── serializers.py           # DRF Serializers for JSON validation & conversion
-│   ├── tests.py                 
-│   ├── tests_api/               # Integration Tests 
+│   ├── tests.py
+│   ├── tests_api/               # Integration Tests
 │   │   ├── __init__.py
 │   │   ├── test_auth.py         # Tests for Login/Register flows
 │   │   ├── test_diet_plan.py    # Tests for AI Diet generation
@@ -241,6 +241,25 @@ We solved the complex problem of users having multiple conditions by creating a 
 
 ---
 
+
+## References
+### Backend & Database
+* [Django Project](https://www.djangoproject.com/) - The web framework for perfectionists with deadlines.
+* [Django REST Framework](https://www.django-rest-framework.org/) - A powerful and flexible toolkit for building Web APIs.
+* [Simple JWT](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/) - JSON Web Token authentication for Django REST Framework.
+* [drf-spectacular](https://drf-spectacular.readthedocs.io/) - Flexible OpenAPI 3 schema generation for Django.
+* [MySQL](https://www.mysql.com/) - Open source relational database.
+
+### Frontend
+* [React](https://react.dev/) - The library for web and native user interfaces.
+* [Vite](https://vitejs.dev/) - Next Generation Frontend Tooling.
+* [Axios](https://axios-http.com/) - Promise-based HTTP client for the browser and node.js.
+* [React Router](https://reactrouter.com/) - Declarative routing for React web applications.
+
+### AI & External Services
+* [Groq API](https://console.groq.com/docs/models) - Fast AI inference (Llama 3.1).
+* [ElevenLabs](https://elevenlabs.io/api) - Realistic AI Text-to-Speech generation.
+
 ## 🤝 Contributing
 
 We welcome contributions!
@@ -250,5 +269,4 @@ We welcome contributions!
 3. Commit your changes.
 4. Push to the branch.
 5. Open a Pull Request.
-
 
