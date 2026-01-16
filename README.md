@@ -256,8 +256,8 @@ We welcome contributions!
 * [Django Project](https://www.djangoproject.com/) - The web framework for perfectionists with deadlines.
 * [Django REST Framework](https://www.django-rest-framework.org/) - A powerful and flexible toolkit for building Web APIs.
 * [Simple JWT](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/) - JSON Web Token authentication for Django REST Framework.
-* [drf-spectacular](https://drf-spectacular.readthedocs.io/) - Sane and flexible OpenAPI 3 schema generation for Django.
-* [MySQL](https://www.mysql.com/) - Open-source relational database management system.
+* [drf-spectacular](https://drf-spectacular.readthedocs.io/) - Flexible OpenAPI 3 schema generation for Django.
+* [MySQL](https://www.mysql.com/) - Open source relational database.
 
 ### Frontend
 * [React](https://react.dev/) - The library for web and native user interfaces.
@@ -268,4 +268,3 @@ We welcome contributions!
 ### AI & External Services
 * [Groq API](https://console.groq.com/docs/models) - Fast AI inference (Llama 3.1).
 * [ElevenLabs](https://elevenlabs.io/api) - Realistic AI Text-to-Speech generation.
-* [gTTS (Google Text-to-Speech)](https://gtts.readthedocs.io/) - Python library and CLI tool to interface with Google Translate's text-to-speech API.
