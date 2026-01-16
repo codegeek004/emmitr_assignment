@@ -153,7 +153,7 @@ Access the API: `http://127.0.0.1:8000`
 
 ---
 
-## 📡 API Documentation
+## API Documentation
 
 The backend includes fully interactive Swagger documentation.
 Once the server is running, visit:
@@ -174,7 +174,7 @@ Once the server is running, visit:
 
 ---
 
-## 🧠 How It Works (Under the Hood)
+## How It Works (Under the Hood)
 
 ### The Prompt Engineering Strategy
 
@@ -197,7 +197,7 @@ We solved the complex problem of users having multiple conditions by creating a 
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 .
@@ -241,14 +241,23 @@ We solved the complex problem of users having multiple conditions by creating a 
 
 ---
 
+## Contributing
+
+We welcome contributions!
+
+1. Fork the repo.
+2. Create a feature branch (`git checkout -b feature/NewFeature`).
+3. Commit your changes.
+4. Push to the branch.
+5. Open a Pull Request.
 
 ## References
 ### Backend & Database
 * [Django Project](https://www.djangoproject.com/) - The web framework for perfectionists with deadlines.
 * [Django REST Framework](https://www.django-rest-framework.org/) - A powerful and flexible toolkit for building Web APIs.
 * [Simple JWT](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/) - JSON Web Token authentication for Django REST Framework.
-* [drf-spectacular](https://drf-spectacular.readthedocs.io/) - Flexible OpenAPI 3 schema generation for Django.
-* [MySQL](https://www.mysql.com/) - Open source relational database.
+* [drf-spectacular](https://drf-spectacular.readthedocs.io/) - Sane and flexible OpenAPI 3 schema generation for Django.
+* [MySQL](https://www.mysql.com/) - Open-source relational database management system.
 
 ### Frontend
 * [React](https://react.dev/) - The library for web and native user interfaces.
@@ -259,14 +268,4 @@ We solved the complex problem of users having multiple conditions by creating a 
 ### AI & External Services
 * [Groq API](https://console.groq.com/docs/models) - Fast AI inference (Llama 3.1).
 * [ElevenLabs](https://elevenlabs.io/api) - Realistic AI Text-to-Speech generation.
-
-## 🤝 Contributing
-
-We welcome contributions!
-
-1. Fork the repo.
-2. Create a feature branch (`git checkout -b feature/NewFeature`).
-3. Commit your changes.
-4. Push to the branch.
-5. Open a Pull Request.
-
+* [gTTS (Google Text-to-Speech)](https://gtts.readthedocs.io/) - Python library and CLI tool to interface with Google Translate's text-to-speech API.
